@@ -1,0 +1,20 @@
+{
+  "name": "esercizio-3.1",
+  "version": "1.0.0",
+  "description": "Il codice è nei file separati `src/analysis-service.ts` (servizio principale), `src/anthropic-client.ts` (implementazione reale del client AI, dimostrativa) e `tests/analysis-service.test.ts` (test).",
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "directories": {
+    "test": "jest"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "@types/jest": "^30.0.0",
+    "jest": "^30.5.1",
+    "ts-jest": "^29.4.12",
+    "typescript": "^7.0.2"
+  }
+}
