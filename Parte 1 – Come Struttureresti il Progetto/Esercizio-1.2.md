@@ -57,16 +57,16 @@ UPLOADED ──► IN_PROGRESS ──► COMPLETED
 ```
  
 - **UPLOADED**: file ricevuto, testo estratto, in attesa che un worker prenda in carico l'analisi.
-- **IN_PROGRESS**: un worker sta chiamando l'AI; qui vive anche il contatore `tentativi`.
-- **COMPLETED**: almeno un'Analisi collegata è `completata`.
+- **IN_PROGRESS**: un worker sta chiamando l'AI; qui vive anche il contatore `attempts`.
+- **COMPLETED**: almeno un'Analysis collegata è `completed`.
 - **ERROR**: tutti i tentativi di analisi sono falliti (dopo i retry).
-Nota: **Document** e **Analysis** hanno stati separati di proposito. Un documento può avere più Analisi nel tempo (ri-analisi con modello diverso): lo stato del Documento riflette l'ultima analisi rilevante, ma lo storico resta intatto.
+Nota: **Document** e **Analysis** hanno stati separati di proposito. Un documento può avere più Analysis nel tempo (ri-analisi con modello diverso): lo stato del Document riflette l'ultima analisi rilevante, ma lo storico resta intatto.
  
 ### Gestione del fallimento a metà analisi
  
 Se l'AI fallisce (timeout, errore HTTP, risposta incomprensibile):
  
-1. L'Analisi passa a `fallita` con `errore_dettaglio` popolato (tipo di errore + eventuale risposta raw salvata per debug).
-2. Se `tentativi < soglia_massima` (es. 3), si pianifica un retry con backoff crescente, l'Analisi torna a `in_coda`.
-3. Se si supera la soglia, l'Analisi resta `fallita` definitivamente e il Documento passa a `errore`, con un alert generato verso l'area Dashboard.
+1. L'Analysis passa a `failed` con `detailed_error` popolato (tipo di errore + eventuale risposta raw salvata per debug).
+2. Se `attempts < soglia_massima` (es. 3), si pianifica un retry con backoff crescente, l'Analysis torna a `in_queue`.
+3. Se si supera la soglia, l'Analysis resta `failed` definitivamente e il Document passa a `error`, con un alert generato verso l'area Dashboard & Alerting.
 4. La risposta parziale o malformata dell'AI **non viene mai scartata silenziosamente**: viene salvata raw per poter fare debug o riprocessarla in futuro senza richiamare l'AI (risparmio di costi).
